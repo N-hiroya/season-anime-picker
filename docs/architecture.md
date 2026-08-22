@@ -12,7 +12,7 @@
 - 画面規模に見合わない状態管理、データ取得、バリデーションのライブラリを導入しない。
 - AniList固有の処理、アプリ内のデータ操作、UIを分離する。
 - フィルター、並び替え、保存データの検証は純粋関数として実装する。
-- unit testはNode.js上で実行し、ブラウザ固有の振る舞いはE2E testで検証する。
+- unit testはjsdom環境を基本とし、ReactコンポーネントとhookをReact Testing Libraryで検証する。Node.js固有の環境が必要なテストは、テストファイル単位でNode環境を指定する。ブラウザ固有の振る舞いはE2E testで検証する。
 - ローカルではnpmスクリプトだけで起動と検証を完結できるようにする。
 
 ## 3. 技術構成
@@ -26,8 +26,8 @@
 | API通信 | Route Handler + 標準`fetch` | AniListへのプロキシ、入力検証、タイムアウト、エラー変換に外部HTTPクライアントは不要 |
 | 状態管理 | React標準フック | 単一画面の検索結果、フィルター、候補リストには専用ストアが不要 |
 | 永続化 | `localStorage` | サーバーやDBを追加せず、要件どおりブラウザ内だけで候補を保持できる |
-| スタイル | CSS Modules + `globals.css` | UIフレームワークを追加せず、コンポーネント単位のスタイルとレスポンシブ対応ができる |
-| unit test | Vitest 4 | TypeScriptとESMを扱え、純粋関数とRoute Handlerを少ない設定でテストできる |
+| スタイル | Tailwind CSS 4 + shadcn/ui + `globals.css` | 基本トークンとUIプリミティブを共有し、コンポーネント単位のスタイルとレスポンシブ対応を一貫して実装できる |
+| unit test | Vitest 4 + React Testing Library | jsdomを既定環境とし、Reactコンポーネント、hook、純粋関数、Route Handlerを同じテスト基盤で検証できる |
 | E2E test | Playwright Test 1.61 | Next.jsの自動起動、Chromium、モバイル幅、localStorageを含む操作を実ブラウザで検証できる |
 | 静的検査 | ESLint + Next.js設定 | Next.jsとReactに固有の問題を標準的な構成で検出できる |
 
@@ -38,6 +38,12 @@
 - `next`
 - `react`
 - `react-dom`
+- `@base-ui/react`
+- `class-variance-authority`
+- `clsx`
+- `lucide-react`
+- `tailwind-merge`
+- `tw-animate-css`
 
 ### 3.2 開発時依存
 
@@ -47,19 +53,25 @@
 - `@types/react-dom`
 - `eslint`
 - `eslint-config-next`
+- `prettier`
+- `tailwindcss`
+- `@tailwindcss/postcss`
+- `shadcn`
 - `vitest`
+- `@testing-library/react`
+- `@testing-library/jest-dom`
+- `jsdom`
 - `@playwright/test`
 
 ### 3.3 初期導入しないもの
 
-以下はMVPの規模では標準機能で代替できるため導入しない。
+以下はMVPの規模では、採用済みの標準機能またはTailwind CSSとshadcn/uiで代替できるため導入しない。
 
-- Tailwind CSS、shadcn/ui、MUIなどのUI・CSSライブラリ
+- MUIなど、shadcn/ui以外のUIコンポーネントライブラリ
 - AxiosなどのHTTPクライアント
 - Zustand、Reduxなどの状態管理ライブラリ
 - TanStack Query、SWRなどのデータ取得ライブラリ
 - Zodなどのスキーマバリデーションライブラリ
-- React Testing Library、jsdomなどのDOM unit test環境
 - MSWなどのAPIモックライブラリ
 
 外部入力とlocalStorageの検証には、小さな型ガードと正規化関数を使用する。これらで保守困難になった場合に限り、実測した必要性に基づいて依存追加を再検討する。
@@ -136,7 +148,7 @@ AniListの生レスポンス型は `server/anilist.ts` の外へ公開しない�
 
 ### 6.1 unit test
 
-VitestはデフォルトのNode環境で使用し、初期段階ではjsdomを導入しない。主な対象は次のとおりとする。
+Vitestはデフォルトのjsdom環境で使用し、React Testing Library、DOM matcher、自動cleanupを利用する。Node.js固有のグローバルや実行条件が必要なテストに限り、テストファイル単位で `@vitest-environment node` を指定する。主な対象は次のとおりとする。
 
 - 現在年月から季節を求める処理と年の境界値
 - 評価、話数、ジャンル、TV形式の単独・複合フィルター

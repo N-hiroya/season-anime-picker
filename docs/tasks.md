@@ -28,24 +28,23 @@ Next.js App Routerを使った、実装と自動テストを開始できる最�
 
 ### タスク
 
-- [ ] Next.js 16、TypeScript、App Routerでプロジェクトを初期化する。
-- [ ] Tailwind CSSを有効化する。
-- [ ] shadcn/uiを初期化し、プロジェクトのベース、アイコン、エイリアスを確定する。
-- [ ] 承認済みビジュアルから色、タイポグラフィ、余白、角丸、境界線、影の基本トークンを定義する。
-- [ ] 必要なshadcn/ui部品の最新ドキュメントを確認し、最小限の部品を追加する。
-- [ ] `s4.anilist.co` をNext Imageの `remotePatterns` に設定する。
-- [ ] カバー画像用のローカルプレースホルダーを用意する。
-- [ ] Vitest、React Testing Library、Playwrightを設定する。
-- [ ] `dev`、`build`、`lint`、`test`、`test:e2e` のスクリプトを定義する。
-- [ ] テスト環境でDOMマッチャーとクリーンアップが動作することを確認する。
+- [x] Next.js 16、TypeScript、App Routerでプロジェクトを初期化する。
+- [x] Tailwind CSSを有効化する。
+- [x] shadcn/uiを初期化し、プロジェクトのベース、アイコン、エイリアスを確定する。
+- [x] 必要なshadcn/ui部品の最新ドキュメントを確認し、最小限の部品を追加する。
+- [x] `s4.anilist.co` をNext Imageの `remotePatterns` に設定する。
+- [x] カバー画像用のローカルプレースホルダーを用意する。
+- [x] Vitest、React Testing Library、Playwrightを設定する。
+- [x] `dev`、`build`、`lint`、`test`、`test:e2e` のスクリプトを定義する。
+- [x] テスト環境でDOMマッチャーとクリーンアップが動作することを確認する。
 
 ### 検証
 
-- [ ] 開発サーバーで空のトップ画面を表示できる。
-- [ ] `build` が成功する。
-- [ ] `lint` が成功する。
-- [ ] 最小のVitestテストが成功する。
-- [ ] Playwrightがトップ画面を開ける。
+- [x] 開発サーバーで空のトップ画面を表示できる。
+- [x] `build` が成功する。
+- [x] `lint` が成功する。
+- [x] 最小のVitestテストが成功する。
+- [x] Playwrightがトップ画面を開ける。
 
 ### 完了条件
 
@@ -314,4 +313,3 @@ APIを再取得せず、表示中のシーズン作品からユーザーが視�
 - URL状態、無限スクロール、タブ間同期
 - ダークモード、多言語、成人向け切替
 - 分析、広告、課金
-

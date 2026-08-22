@@ -19,6 +19,9 @@
 - `npm run dev` — ローカル開発サーバーを起動する。
 - `npm test` — 自動テスト一式を実行する。
 - `npm run lint` — コードスタイルと一般的な問題を検査する。
+- `npm run format:check` — Prettierによるフォーマット差分を検査する。
+- `npm run typecheck` — TypeScriptの型検査を実行する。
+- `npm run test:e2e` — Playwright ChromiumのE2Eテストを実行する。
 - `npm run build` — 本番用ビルドを作成する。
 
 コマンドを変更した場合は、このガイドと README も更新してください。
@@ -39,3 +42,13 @@
 
 プルリクエストには、変更の目的、実装概要、実施した検証、関連 Issue を記載してください。
 画面に影響する変更にはスクリーンショットまたは録画を添付し、新しい設定、依存関係、後続作業がある場合は明記してください。
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

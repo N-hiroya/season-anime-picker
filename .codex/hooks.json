@@ -1,0 +1,17 @@
+{
+  "description": "Codexの最終回答に学習サマリーが含まれているか確認する",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 \"$(git rev-parse --show-toplevel)/.codex/hooks/require_learning_summary.py\"",
+            "timeout": 10,
+            "statusMessage": "学習サマリーを確認しています"
+          }
+        ]
+      }
+    ]
+  }
+}
