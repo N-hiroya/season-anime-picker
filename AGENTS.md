@@ -1,54 +1,62 @@
 # プロジェクトルール
 
-## 基本方針
+## 目次
 
-- 回答と説明は日本語で行う
-- 要件が曖昧な場合は、実装前に仮定を明示
-- 不要なリファクタリングや無関係な変更を行わない
+- [ディレクトリ構成](#ディレクトリ構成)
+- [参照ドキュメント](#参照ドキュメント)
+- [開発・検証コマンド](#開発検証コマンド)
+- [作業ルール](#作業ルール)
 
-## プロジェクト構成とモジュール配置
+## ディレクトリ構成
 
-このリポジトリは現在、空のひな型であり、ソース、テスト、アセットの各ディレクトリはまだありません。ルートにはプロジェクト全体の設定とドキュメントのみを配置してください。実装開始時は、アプリケーションコードを `src/`、自動テストを `tests/`、静的ファイルを `public/` または `assets/` に置くなど、予測しやすい構成を採用します。可能な限り機能単位（例: `src/features/season-picker/`）でコードをまとめ、テストは対象コードの近く、または `tests/` 内の対応する階層に配置してください。
+```text
+docs/                         要件・設計・実装タスク
+public/                       静的ファイル
+src/
+├── app/                      Next.js App Router
+├── components/ui/            shadcn/uiコンポーネント
+├── features/season-picker/   シーズン選択機能
+└── lib/                      共通の基盤処理
+tests/
+├── unit/                     Vitest単体テスト
+├── e2e/                      Playwright E2Eテスト
+└── setup.ts                  単体テストの共通設定
+```
 
-`.serena/` はローカルのプロジェクトツール設定用です。アプリケーションコードを置かず、端末固有の設定はコミットしないでください。
+機能固有の処理は `src/features/season-picker/` に配置する。
+責務境界と今後の配置は [アーキテクチャ](docs/architecture.md) を参照する。
 
-## ビルド・テスト・開発コマンド
+## 参照ドキュメント
 
-現時点では、ビルドシステムやパッケージマネージャーは設定されていません。導入時は、そのエコシステムで標準的なタスクランナーを使い、少数の主要コマンドを定義して文書化してください。Node.js プロジェクトの場合は、次のスクリプトを推奨します。
+- [README](README.md)：必要環境、セットアップ、ローカル起動
+- [要件](docs/requirements.md)：MVPの範囲、期待する振る舞い、受け入れ条件
+- [アーキテクチャ](docs/architecture.md)：採用技術、責務境界、データ契約、テスト方針
+- [実装タスク](docs/tasks.md)：実装順序、チェックリスト、マイルストーンの完了条件
 
-- `npm run dev` — ローカル開発サーバーを起動する。
-- `npm test` — 自動テスト一式を実行する。
-- `npm run lint` — コードスタイルと一般的な問題を検査する。
-- `npm run format:check` — Prettierによるフォーマット差分を検査する。
-- `npm run typecheck` — TypeScriptの型検査を実行する。
-- `npm run test:e2e` — Playwright ChromiumのE2Eテストを実行する。
-- `npm run build` — 本番用ビルドを作成する。
+仕様は要件、実装方法はアーキテクチャを正とする。
+依存バージョンと実行コマンドは [package.json](package.json) を確認する。
 
-コマンドを変更した場合は、このガイドと README も更新してください。
+## 開発・検証コマンド
 
-## コーディングスタイルと命名規則
+リポジトリルートで実行する。
 
-文字コードは UTF-8、改行コードは LF を使用し、初期セットアップで選定したフォーマッターとリンターに従ってください。JSON、YAML、JavaScript、TypeScript はスペース2個のインデントを推奨します。ディレクトリと非コンポーネントファイルには `kebab-case`、UI コンポーネントと公開型には `PascalCase`、関数と変数には `camelCase` を使用します。各モジュールの責務を絞り、無関係な処理を汎用ユーティリティへ集約しないでください。
+| コマンド               | 内容                                 |
+| ---------------------- | ------------------------------------ |
+| `npm run dev`          | 開発サーバーを起動                   |
+| `npm run build`        | 本番用ビルドを作成                   |
+| `npm run start`        | 本番用ビルドを起動                   |
+| `npm run lint`         | ESLintで検査                         |
+| `npm run format:check` | Prettierで書式を検査                 |
+| `npm run typecheck`    | TypeScriptの型検査                   |
+| `npm test`             | Vitest単体テストを1回実行            |
+| `npm run test:e2e`     | PlaywrightでChromium E2Eテストを実行 |
 
-## テスト方針
+初回セットアップとChromiumのインストール手順は [README](README.md) を参照する。
+コマンドを変更した場合は、この表とREADMEも更新する。
 
-動作変更や不具合修正にはテストを追加してください。テストファイルは `season-picker.test.ts` のように対象の単位または機能に合わせて命名します。正常系、無効な入力、境界値を対象にしてください。テストフレームワークを選定したら、その名称とカバレッジ基準をここに記載します。それまではカバレッジを保証しないでください。
+## 作業ルール
 
-## コミットとプルリクエスト
-
-規約の根拠となる既存のコミット履歴はありません。
-コミット件名は短い命令形とし、必要に応じて Conventional Commits に従ってください（例: `feat: add seasonal title filtering`）。
-1コミットの目的を明確にし、変更を検証するテストも同じコミットに含めます。
-
-プルリクエストには、変更の目的、実装概要、実施した検証、関連 Issue を記載してください。
-画面に影響する変更にはスクリーンショットまたは録画を添付し、新しい設定、依存関係、後続作業がある場合は明記してください。
-
-<!-- BEGIN:nextjs-agent-rules -->
-
-# This is NOT the Next.js you know
-
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- 要件・設計・依頼内容に、振る舞いや実装方針に影響する曖昧さがある場合は、実装前に `request_user_input` で確認する。軽微な命名、書式、既存規約から明確な事項は判断してよい。
+- マイルストーンの進行と実装範囲は [実装タスク](docs/tasks.md) に従う。チェックは実装と必要な検証が完了した項目にだけ付ける。
+- 動作変更・不具合修正には対応するテストを追加・更新する。配置と検証対象は [アーキテクチャのテスト方針](docs/architecture.md#6-テスト方針) に従う。
+- 書式と静的検査の規則は [.prettierrc.json](.prettierrc.json) と [eslint.config.mjs](eslint.config.mjs) に従う。
