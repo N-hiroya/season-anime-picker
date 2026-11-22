@@ -1,0 +1,13 @@
+.git
+dist
+out
+build
+public
+.next
+.serena
+coverage
+docs
+node_modules
+package-lock.json
+playwright-report
+test-results
